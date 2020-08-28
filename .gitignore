@@ -1,0 +1,21 @@
+# design directory
+system-design/
+
+# environment file
+.env
+
+# log file
+log/
+
+# setting files
+nginx/default.conf
+nginx/nginx.conf
+php-fpm/php.ini
+php-fpm/php-fpm.conf
+php-fpm/zzz-www.conf
+
+# socket
+php-fpm/sock/
+
+# DB
+pgsql/data/
