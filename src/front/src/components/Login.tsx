@@ -49,8 +49,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Login = () => {
   const classes = useStyles();
   const [data, setData] = useState(0)
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setData(newValue)
@@ -58,6 +60,10 @@ const Login = () => {
 
   const login = () => {
     console.log({email}, {password})
+  }
+
+  const register = () => {
+    console.log({name}, {email}, {password}, {passwordConfirmation})
   }
 
   return (
@@ -77,6 +83,7 @@ const Login = () => {
           </Tabs>
         </Paper>
         <TabPanel value={data} index={0}>
+          <Typography variant="h4">Login Form</Typography>
           <label>Email</label>
           <input type="text" className="form__item" id="login-email" onChange={(ev) => setEmail(ev.currentTarget.value)}></input> <br/>
           <label>Password</label>
@@ -84,7 +91,16 @@ const Login = () => {
           <button className="button button--inverse" onClick={login}>login</button>
         </TabPanel>
         <TabPanel value={data} index={1}>
-          Register Form
+          <Typography variant="h4">Register Form</Typography>
+          <label>Name</label>
+          <input type="text" className="form__item" id="username" onChange={(ev) => setName(ev.currentTarget.value)}></input> <br/>
+          <label>Email</label>
+          <input type="text" className="form__item" id="email" onChange={(ev) => setEmail(ev.currentTarget.value)}></input> <br/>
+          <label>Password</label>
+          <input type="password" className="form__item" id="password" onChange={(ev) => setPassword(ev.currentTarget.value)}></input> <br/>
+          <label>Password (Confirm)</label>
+          <input type="password" className="form__item" id="password-confirmation" onChange={(ev) => setPasswordConfirmation(ev.currentTarget.value)}></input> <br/>
+          <button className="button button--inverse" onClick={register}>Register</button>
         </TabPanel>
       </Box>
     </>
