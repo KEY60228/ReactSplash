@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
