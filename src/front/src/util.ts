@@ -7,13 +7,13 @@ export const getCookieValue = (searchKey: String): String => {
   if (typeof searchKey === 'undefined') {
     return ''
   }
-  
+
   let val: String = ''
-  
+
   document.cookie.split(';').forEach(cookie => {
     const [key, value] = cookie.split('=')
     if (key === searchKey) {
-      return val = value
+      return (val = value)
     }
   })
 

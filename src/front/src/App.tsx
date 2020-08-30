@@ -13,8 +13,8 @@ const App = () => {
       <BrowserRouter>
         <Navbar />
         <Switch>
-          <Route path="/" exact children={<PhotoList />}/>
-          <Route path="/login" children={<Login />}/>
+          <Route path="/" exact children={<PhotoList />} />
+          <Route path="/login" children={<Login />} />
         </Switch>
         <Footer />
       </BrowserRouter>

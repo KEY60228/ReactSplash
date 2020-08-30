@@ -1,14 +1,13 @@
-import { combineReducers } from "redux";
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 
 // それぞれ slice.reducer を default export している前提
-import authReducer from "./auth";
-
+import authReducer from './auth'
 
 const reducer = combineReducers({
-  auth: authReducer
-});
+  auth: authReducer,
+})
 
-const store = configureStore({ reducer });
+const store = configureStore({ reducer })
 
-export default store;
+export default store
