@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Stateの初期状態
 const initialState = {
-
+  user: null
 };
 
 // Sliceを生成する
@@ -11,9 +11,9 @@ const slice = createSlice({
   initialState, // Stateの初期状態 (上で定義)
   reducers: {
     // action.payloadに渡された引数が入っている
-    // setName: (state, action) => {
-    //   return Object.assign({}, state, { name: action.payload })
-    // },
+    setUser: (state, action) => {
+      return Object.assign({}, state, {user: action.payload})
+    }
   },
 });
 
@@ -21,4 +21,16 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Action Creatorsをエクスポートする
-// export const { setName } = slice.actions;
+export const { setUser } = slice.actions
+
+// Asyncアクション
+export const register = (data: any) => {
+  return async(dispatch: any) => {
+    try {
+      const response = await window.axios.post('/api/register', data)
+      dispatch(setUser(response))
+    } catch(err) {
+      
+    }
+  }
+}
