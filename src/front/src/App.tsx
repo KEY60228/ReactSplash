@@ -2,10 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-import PhotoList from './PhotoList'
-import Login from './Login'
-import Navbar from './Navbar'
-import Footer from './Footer'
+import PhotoList from './components/PhotoList'
+import Login from './components/Login'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 const App = () => {
   return (
