@@ -8,7 +8,7 @@ system-design/
 log/
 
 # setting files
-nginx/default.conf
+nginx/laravel.conf
 nginx/nginx.conf
 php-fpm/php.ini
 php-fpm/php-fpm.conf
