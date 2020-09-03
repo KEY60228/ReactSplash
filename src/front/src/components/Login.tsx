@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
+
+import { asyncRegister } from '../stores/auth'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -43,34 +47,47 @@ const a11yProps = (index: any) => {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
-  }
+  },
 }))
 
 const Login = () => {
-  const classes = useStyles();
+  const classes = useStyles()
+
+  const history = useHistory()
+
   const [data, setData] = useState(0)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
+  const dispatch = useDispatch()
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setData(newValue)
   }
 
   const login = () => {
-    console.log({email}, {password})
+    console.log({ email }, { password })
   }
 
-  const register = () => {
-    console.log({name}, {email}, {password}, {passwordConfirmation})
+  const register = async () => {
+    const user = {
+      name: name,
+      email: email,
+      password: password,
+      passwordConfirmation: passwordConfirmation,
+    }
+
+    await dispatch(asyncRegister(user))
+    history.push('/')
   }
 
   return (
     <>
       <Box width="50%">
         <Paper className="classes.root">
-          <Tabs 
+          <Tabs
             value={data}
             onChange={handleChange}
             indicatorColor="primary"
@@ -85,22 +102,62 @@ const Login = () => {
         <TabPanel value={data} index={0}>
           <Typography variant="h4">Login Form</Typography>
           <label>Email</label>
-          <input type="text" className="form__item" id="login-email" onChange={(ev) => setEmail(ev.currentTarget.value)}></input> <br/>
+          <input
+            type="text"
+            className="form__item"
+            id="login-email"
+            onChange={ev => setEmail(ev.currentTarget.value)}
+          ></input>{' '}
+          <br />
           <label>Password</label>
-          <input type="password" className="form__item" id="login-password" onChange={(ev) => setPassword(ev.currentTarget.value)}></input> <br/>
-          <button className="button button--inverse" onClick={login}>login</button>
+          <input
+            type="password"
+            className="form__item"
+            id="login-password"
+            onChange={ev => setPassword(ev.currentTarget.value)}
+          ></input>{' '}
+          <br />
+          <button className="button button--inverse" onClick={login}>
+            login
+          </button>
         </TabPanel>
         <TabPanel value={data} index={1}>
           <Typography variant="h4">Register Form</Typography>
           <label>Name</label>
-          <input type="text" className="form__item" id="username" onChange={(ev) => setName(ev.currentTarget.value)}></input> <br/>
+          <input
+            type="text"
+            className="form__item"
+            id="username"
+            onChange={ev => setName(ev.currentTarget.value)}
+          ></input>{' '}
+          <br />
           <label>Email</label>
-          <input type="text" className="form__item" id="email" onChange={(ev) => setEmail(ev.currentTarget.value)}></input> <br/>
+          <input
+            type="text"
+            className="form__item"
+            id="email"
+            onChange={ev => setEmail(ev.currentTarget.value)}
+          ></input>{' '}
+          <br />
           <label>Password</label>
-          <input type="password" className="form__item" id="password" onChange={(ev) => setPassword(ev.currentTarget.value)}></input> <br/>
+          <input
+            type="password"
+            className="form__item"
+            id="password"
+            onChange={ev => setPassword(ev.currentTarget.value)}
+          ></input>{' '}
+          <br />
           <label>Password (Confirm)</label>
-          <input type="password" className="form__item" id="password-confirmation" onChange={(ev) => setPasswordConfirmation(ev.currentTarget.value)}></input> <br/>
-          <button className="button button--inverse" onClick={register}>Register</button>
+          <input
+            type="password"
+            className="form__item"
+            id="password-confirmation"
+            onChange={ev => setPasswordConfirmation(ev.currentTarget.value)}
+          ></input>{' '}
+          <br />
+          <button className="button button--inverse" onClick={register}>
+            Register
+          </button>
         </TabPanel>
       </Box>
     </>
