@@ -35,3 +35,14 @@ export const asyncRegister = (data: any) => {
     } catch (err) {}
   }
 }
+
+export const asyncLogin = (data: any) => {
+  return async (dispatch: any) => {
+    try {
+      const response = await window.axios.post(
+        'https://localhost:1443/api/login',
+        data
+      )
+    } catch(err) {}
+  }
+}
