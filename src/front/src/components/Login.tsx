@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -83,6 +83,17 @@ const Login = () => {
     history.push('/')
   }
 
+  useEffect(() => {
+    window.axios.get('http://localhost:8080/api/token', {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      }
+    }).then((response: any) => {
+      console.log(response)
+    })
+  }, [])
+
   return (
     <>
       <Box width="50%">
@@ -100,7 +111,7 @@ const Login = () => {
           </Tabs>
         </Paper>
         <TabPanel value={data} index={0}>
-          <Typography variant="h4">Login Form</Typography>
+          Login Form <br/>
           <label>Email</label>
           <input
             type="text"
@@ -122,7 +133,7 @@ const Login = () => {
           </button>
         </TabPanel>
         <TabPanel value={data} index={1}>
-          <Typography variant="h4">Register Form</Typography>
+          Register Form <br/>
           <label>Name</label>
           <input
             type="text"
