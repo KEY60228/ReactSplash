@@ -48,3 +48,14 @@ export const asyncLogin = (data: any) => {
     } catch(err) {}
   }
 }
+
+export const asyncLogout = () => {
+  return async(dispatch: any) => {
+    try {
+      const response = await window.axios.post(
+        'https://localhost:1443/api/logout'
+      )
+    } catch(err) {}
+    dispatch(setUser(null));
+  }
+}
