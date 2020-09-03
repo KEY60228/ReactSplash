@@ -86,7 +86,7 @@ const Login = () => {
     }
 
     await dispatch(asyncRegister(user))
-    // history.push('/')
+    history.push('/')
   }
 
   useEffect(() => {
