@@ -28,7 +28,7 @@ export const asyncRegister = (data: any) => {
   return async (dispatch: any) => {
     try {
       const response = await window.axios.post(
-        'http://localhost:8080/api/register',
+        'https://localhost:1443/api/register',
         data,
       )
       dispatch(setUser(response))

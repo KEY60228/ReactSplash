@@ -76,7 +76,7 @@ const Login = () => {
       name: name,
       email: email,
       password: password,
-      passwordConfirmation: passwordConfirmation,
+      password_confirmation: passwordConfirmation,
     }
 
     await dispatch(asyncRegister(user))
@@ -84,7 +84,7 @@ const Login = () => {
   }
 
   useEffect(() => {
-    window.axios.get('http://localhost:8080/api/token', {
+    window.axios.get('https://localhost:1443/api/token', {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
