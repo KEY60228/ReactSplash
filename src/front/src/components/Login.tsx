@@ -9,7 +9,7 @@ import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 
-import { asyncRegister } from '../stores/auth'
+import { asyncRegister, asyncLogin } from '../stores/auth'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -67,8 +67,14 @@ const Login = () => {
     setData(newValue)
   }
 
-  const login = () => {
-    console.log({ email }, { password })
+  const login = async() => {
+    const user = {
+      email: email,
+      password: password
+    }
+
+    await dispatch(asyncLogin(user))
+    history.push('/')
   }
 
   const register = async () => {
@@ -80,7 +86,7 @@ const Login = () => {
     }
 
     await dispatch(asyncRegister(user))
-    history.push('/')
+    // history.push('/')
   }
 
   useEffect(() => {
