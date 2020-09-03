@@ -45,4 +45,9 @@ class LoginController extends Controller
       $request->session()->regenerate();
       return response()->json();
     }
+
+    public function authenticated(Request $request, $user)
+    {
+      return $user;
+    }
 }
