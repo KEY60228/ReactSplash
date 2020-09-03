@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/token', function() {
-  return;
+  return response()->json();
 });
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
