@@ -6,7 +6,9 @@ const Navbar = () => {
   return (
     <>
       <nav className="navbar">
-        <Link to="/" className="navbar__brand">ReactSplash</Link>
+        <Link to="/" className="navbar__brand">
+          ReactSplash
+        </Link>
         <div className="navbar__menu">
           <div className="navbar__item">
             <button className="button">
@@ -14,9 +16,7 @@ const Navbar = () => {
               Submit a photo
             </button>
           </div>
-          <span className="navbar__item">
-            username
-          </span>
+          <span className="navbar__item">username</span>
           <div className="navbar__item">
             <Link to="/login" className="button button--link">
               Login / Register

@@ -8,8 +8,9 @@ system-design/
 log/
 
 # setting files
-nginx/default.conf
+nginx/laravel.conf
 nginx/nginx.conf
+nginx/ssl/
 php-fpm/php.ini
 php-fpm/php-fpm.conf
 php-fpm/zzz-www.conf
