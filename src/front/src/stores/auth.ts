@@ -43,7 +43,7 @@ export const asyncLogin = (data: any) => {
         'https://localhost:1443/api/login',
         data
       )
-      console.log(response.data)
+      // console.log(response.data)
       dispatch(setUser(response.data))
     } catch(err) {}
   }

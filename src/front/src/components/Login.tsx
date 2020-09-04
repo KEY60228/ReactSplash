@@ -96,7 +96,7 @@ const Login = () => {
         'Content-Type': 'application/json;charset=UTF-8',
       }
     }).then((response: any) => {
-      console.log(response)
+      // console.log(response)
     })
   }, [])
 
