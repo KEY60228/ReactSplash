@@ -28,10 +28,34 @@ export const asyncRegister = (data: any) => {
   return async (dispatch: any) => {
     try {
       const response = await window.axios.post(
-        'http://localhost:8080/api/register',
+        'https://localhost:1443/api/register',
         data,
       )
-      dispatch(setUser(response))
+      dispatch(setUser(response.data))
     } catch (err) {}
+  }
+}
+
+export const asyncLogin = (data: any) => {
+  return async (dispatch: any) => {
+    try {
+      const response = await window.axios.post(
+        'https://localhost:1443/api/login',
+        data
+      )
+      console.log(response.data)
+      dispatch(setUser(response.data))
+    } catch(err) {}
+  }
+}
+
+export const asyncLogout = () => {
+  return async(dispatch: any) => {
+    try {
+      const response = await window.axios.post(
+        'https://localhost:1443/api/logout'
+      )
+    } catch(err) {}
+    dispatch(setUser(null));
   }
 }

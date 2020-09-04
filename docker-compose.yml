@@ -17,13 +17,14 @@ services:
     image: nginx:1.19-alpine
     ports: 
       - "8080:80"
-      # - "1443:443" SSL
+      - "1443:443"
     working_dir: /var/www/SPA
     env_file:
       - .env
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/laravel.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/ssl:/etc/nginx/ssl
       - ./log/nginx:/var/log/nginx
       - ./php-fpm/sock:/var/run/php-fpm
 

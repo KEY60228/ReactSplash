@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -9,7 +9,7 @@ import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 
-import { asyncRegister } from '../stores/auth'
+import { asyncRegister, asyncLogin } from '../stores/auth'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -67,8 +67,14 @@ const Login = () => {
     setData(newValue)
   }
 
-  const login = () => {
-    console.log({ email }, { password })
+  const login = async() => {
+    const user = {
+      email: email,
+      password: password
+    }
+
+    await dispatch(asyncLogin(user))
+    history.push('/')
   }
 
   const register = async () => {
@@ -76,12 +82,23 @@ const Login = () => {
       name: name,
       email: email,
       password: password,
-      passwordConfirmation: passwordConfirmation,
+      password_confirmation: passwordConfirmation,
     }
 
     await dispatch(asyncRegister(user))
     history.push('/')
   }
+
+  useEffect(() => {
+    window.axios.get('https://localhost:1443/api/token', {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      }
+    }).then((response: any) => {
+      console.log(response)
+    })
+  }, [])
 
   return (
     <>
@@ -100,7 +117,7 @@ const Login = () => {
           </Tabs>
         </Paper>
         <TabPanel value={data} index={0}>
-          <Typography variant="h4">Login Form</Typography>
+          Login Form <br/>
           <label>Email</label>
           <input
             type="text"
@@ -122,7 +139,7 @@ const Login = () => {
           </button>
         </TabPanel>
         <TabPanel value={data} index={1}>
-          <Typography variant="h4">Register Form</Typography>
+          Register Form <br/>
           <label>Name</label>
           <input
             type="text"
