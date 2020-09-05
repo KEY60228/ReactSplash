@@ -8,6 +8,8 @@ import Login from './components/Login'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { asyncCurrentUser } from './stores/auth'
+import GuestRoute from './routes/GuestRoute'
+import PrivateRoute from './routes/PrivateRoute'
 
 const App = () => {
   const dispatch = useDispatch()
