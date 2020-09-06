@@ -7,7 +7,8 @@ import { setCode } from './error'
 const initialState = {
   user: null,
   apiStatus: null,
-  loginErrorMessages: null
+  loginErrorMessages: null,
+  registerErrorMessages: null
 }
 
 // Sliceを生成する
@@ -24,7 +25,10 @@ const slice = createSlice({
     },
     setLoginErrorMessages: (state, action) => {
       return Object.assign({}, state, { loginErrorMessages: action.payload })
-    }
+    },
+    setRegisterErrorMessages: (state, action) => {
+      return Object.assign({}, state, { registerErrorMessages: action.payload })
+    },
   },
 })
 
@@ -32,67 +36,85 @@ const slice = createSlice({
 export default slice.reducer
 
 // Action Creatorsをエクスポートする
-export const { setUser, setApiStatus, setLoginErrorMessages } = slice.actions
+export const { setUser, setApiStatus, setLoginErrorMessages, setRegisterErrorMessages } = slice.actions
 
 // Asyncアクション
 export const asyncRegister = (data: any) => {
-  return async (dispatch: any) => {
-    try {
-      const response = await window.axios.post(
-        'https://localhost:1443/api/register',
-        data,
-      )
+return async (dispatch: any) => {
+    dispatch(setApiStatus(null))
+    const response = await window.axios.post(
+      'https://localhost:1443/api/register',
+      data,
+    )
+
+    if (response.status === CREATED) {
+      dispatch(setApiStatus(true))
       dispatch(setUser(response.data))
-    } catch (err) {}
+    }
+
+    dispatch(setApiStatus(false))
+    
+    if (response.status === UNPROCESSABLE_ENTITY) {
+      dispatch(setRegisterErrorMessages(response.data.errors))
+    }
+
+    dispatch(setCode(response.status))
   }
 }
 
 export const asyncLogin = (data: any) => {
   return async (dispatch: any) => {
-    try {
-      dispatch(setApiStatus(null))
-      const response = await window.axios.post(
-        'https://localhost:1443/api/login',
-        data
-      ).catch(
-        (err:any) => err.response || err
-      )
-      
-      if (response.status === OK) {
-        dispatch(setApiStatus(true))
-        dispatch(setUser(response.data))
-      }
-      
-      dispatch(setApiStatus(false))
+    dispatch(setApiStatus(null))
+    const response = await window.axios.post(
+      'https://localhost:1443/api/login',
+      data
+    )
+    
+    if (response.status === OK) {
+      dispatch(setApiStatus(true))
+      dispatch(setUser(response.data))
+    }
+    
+    dispatch(setApiStatus(false))
 
-      if (response.status === UNPROCESSABLE_ENTITY) {
-        dispatch(setLoginErrorMessages(response.data.errors))
-      }
-      
-      dispatch(setCode(response.status))
-    } catch(err) {}
+    if (response.status === UNPROCESSABLE_ENTITY) {
+      dispatch(setLoginErrorMessages(response.data.errors))
+    }
+
+    dispatch(setCode(response.status))
   }
 }
 
 export const asyncLogout = () => {
   return async(dispatch: any) => {
-    try {
-      const response = await window.axios.post(
-        'https://localhost:1443/api/logout'
-      )
-      dispatch(setUser(null));
-    } catch(err) {}
+    dispatch(setApiStatus(null))
+    const response = await window.axios.post(
+      'https://localhost:1443/api/logout'
+    )
+
+    if (response.status === OK) {
+      dispatch(setApiStatus(true))
+      dispatch(setUser(null))
+    }
+
+    dispatch(setApiStatus(false))
+    dispatch(setCode(response.status))
   }
 }
 
 export const asyncCurrentUser = () => {
   return async (dispatch: any) => {
-    try {
-      const response = await window.axios.get(
-        'https://localhost:1443/api/user'
-      )
+    dispatch(setApiStatus(null))
+    const response = await window.axios.get(
+      'https://localhost:1443/api/user'
+    )
+    
+    if (response.status === OK) {
       dispatch(setUser(response.data));
       dispatch(setApiStatus(true))
-    } catch (err) {}
+    }
+
+    dispatch(setApiStatus(false))
+    dispatch(setCode(response.status))
   }
 }
