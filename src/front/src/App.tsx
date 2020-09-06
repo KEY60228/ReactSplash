@@ -10,6 +10,7 @@ import Footer from './components/Footer'
 import { asyncCurrentUser } from './stores/auth'
 import GuestRoute from './routes/GuestRoute'
 import PrivateRoute from './routes/PrivateRoute'
+import SystemError from './components/errors/SystemError'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -29,6 +30,7 @@ const App = () => {
         <Switch>
           <Route path="/" exact children={<PhotoList />} />
           <GuestRoute path="/login" children={<Login />} />
+          <Route path="/500" children={<SystemError />}/>
         </Switch>
         <Footer />
       </BrowserRouter>
