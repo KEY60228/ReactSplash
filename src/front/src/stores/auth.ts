@@ -43,7 +43,7 @@ export const asyncLogin = (data: any) => {
         'https://localhost:1443/api/login',
         data
       )
-      console.log(response.data)
+      // console.log(response.data)
       dispatch(setUser(response.data))
     } catch(err) {}
   }
@@ -55,7 +55,18 @@ export const asyncLogout = () => {
       const response = await window.axios.post(
         'https://localhost:1443/api/logout'
       )
+      dispatch(setUser(null));
     } catch(err) {}
-    dispatch(setUser(null));
+  }
+}
+
+export const asyncCurrentUser = () => {
+  return async (dispatch: any) => {
+    try {
+      const response = await window.axios.get(
+        'https://localhost:1443/api/user'
+      )
+      dispatch(setUser(response.data));
+    } catch (err) {}
   }
 }
