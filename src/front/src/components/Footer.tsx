@@ -1,15 +1,26 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { asyncLogout } from '../stores/auth'
 
 const Footer = () => {
   const dispatch = useDispatch()
-  
+  const history = useHistory()
+
+  interface State {
+    auth: any,
+    error: any
+  }
+  const apiStatus = useSelector((state: State) => state.auth.apiStatus)
+
   const logout = async() => {
-    await dispatch(asyncLogout())
+    await new Promise(() => dispatch(asyncLogout()))
+
+    if (apiStatus) {
+      history.push('/login')
+    }
   }
 
   interface State {

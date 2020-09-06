@@ -19,3 +19,8 @@ window.axios.interceptors.request.use((config: any) => {
   config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
   return config
 })
+
+window.axios.interceptors.response.use(
+  (response: any) => response,
+  (error: any) => error.response || error
+)
