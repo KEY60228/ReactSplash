@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import { useSelector } from 'react-redux'
 
-import { asyncRegister, asyncLogin } from '../stores/auth'
+import { asyncRegister, asyncLogin, setLoginErrorMessages } from '../stores/auth'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -60,6 +60,7 @@ const Login = () => {
     auth: any
   }
   const apiStatus = useSelector((state: State) => state.auth.apiStatus)
+  const loginErrors = useSelector((state: State) => state.auth.loginErrorMessages)
 
   const [data, setData] = useState(0)
   const [name, setName] = useState('')
@@ -105,6 +106,8 @@ const Login = () => {
     }).then((response: any) => {
       // console.log(response)
     })
+
+    dispatch(setLoginErrorMessages(null))
   }, [])
 
   return (
@@ -125,6 +128,24 @@ const Login = () => {
         </Paper>
         <TabPanel value={data} index={0}>
           Login Form <br/>
+          { loginErrors && 
+            <div className="errors">
+              { loginErrors.email && 
+                <ul>
+                  { loginErrors.email.map((msg: string) => {
+                    return <li>{ msg }</li>
+                  })}
+                </ul>
+              }
+              { loginErrors.password && 
+                <ul>
+                  { loginErrors.password.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+            </div>
+          }
           <label>Email</label>
           <input
             type="text"

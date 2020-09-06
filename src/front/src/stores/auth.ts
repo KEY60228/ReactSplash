@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { OK, CREATED } from '../util'
+import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import { setCode } from './error'
 
 // Stateの初期状態
 const initialState = {
   user: null,
-  apiStatus: null
+  apiStatus: null,
+  loginErrorMessages: null
 }
 
 // Sliceを生成する
@@ -20,6 +21,9 @@ const slice = createSlice({
     },
     setApiStatus: (state, action) => {
       return Object.assign({}, state, { apiStatus: action.payload })
+    },
+    setLoginErrorMessages: (state, action) => {
+      return Object.assign({}, state, { loginErrorMessages: action.payload })
     }
   },
 })
@@ -28,7 +32,7 @@ const slice = createSlice({
 export default slice.reducer
 
 // Action Creatorsをエクスポートする
-export const { setUser, setApiStatus } = slice.actions
+export const { setUser, setApiStatus, setLoginErrorMessages } = slice.actions
 
 // Asyncアクション
 export const asyncRegister = (data: any) => {
@@ -57,9 +61,14 @@ export const asyncLogin = (data: any) => {
       if (response.status === OK) {
         dispatch(setApiStatus(true))
         dispatch(setUser(response.data))
-        return false
       }
+      
       dispatch(setApiStatus(false))
+
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        dispatch(setLoginErrorMessages(response.data.errors))
+      }
+      
       dispatch(setCode(response.status))
     } catch(err) {}
   }
