@@ -28,7 +28,7 @@ const App = () => {
         <Navbar />
         <Switch>
           <Route path="/" exact children={<PhotoList />} />
-          <Route path="/login" children={<Login />} />
+          <GuestRoute path="/login" children={<Login />} />
         </Switch>
         <Footer />
       </BrowserRouter>
