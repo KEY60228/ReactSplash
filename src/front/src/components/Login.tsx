@@ -8,6 +8,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
+import { useSelector } from 'react-redux'
 
 import { asyncRegister, asyncLogin } from '../stores/auth'
 
@@ -52,16 +53,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Login = () => {
   const classes = useStyles()
-
   const history = useHistory()
+  const dispatch = useDispatch()
+
+  interface State {
+    auth: any
+  }
+  const apiStatus = useSelector((state: State) => state.auth.apiStatus)
 
   const [data, setData] = useState(0)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
-
-  const dispatch = useDispatch()
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setData(newValue)
@@ -73,8 +77,11 @@ const Login = () => {
       password: password
     }
 
-    await dispatch(asyncLogin(user))
-    history.push('/')
+    await new Promise(() => dispatch(asyncLogin(user)))
+
+    if (apiStatus) {
+      history.push('/')
+    }
   }
 
   const register = async () => {
