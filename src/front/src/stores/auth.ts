@@ -1,8 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { OK, CREATED } from '../util'
+import { setCode } from './error'
+
 // Stateの初期状態
 const initialState = {
   user: null,
+  apiStatus: null
 }
 
 // Sliceを生成する
@@ -14,6 +18,9 @@ const slice = createSlice({
     setUser: (state, action) => {
       return Object.assign({}, state, { user: action.payload })
     },
+    setApiStatus: (state, action) => {
+      return Object.assign({}, state, { apiStatus: action.payload })
+    }
   },
 })
 
@@ -21,7 +28,7 @@ const slice = createSlice({
 export default slice.reducer
 
 // Action Creatorsをエクスポートする
-export const { setUser } = slice.actions
+export const { setUser, setApiStatus } = slice.actions
 
 // Asyncアクション
 export const asyncRegister = (data: any) => {
@@ -39,12 +46,21 @@ export const asyncRegister = (data: any) => {
 export const asyncLogin = (data: any) => {
   return async (dispatch: any) => {
     try {
+      dispatch(setApiStatus(null))
       const response = await window.axios.post(
         'https://localhost:1443/api/login',
         data
+      ).catch(
+        (err:any) => err.response || err
       )
-      // console.log(response.data)
-      dispatch(setUser(response.data))
+      
+      if (response.status === OK) {
+        dispatch(setApiStatus(true))
+        dispatch(setUser(response.data))
+        return false
+      }
+      dispatch(setApiStatus(false))
+      dispatch(setCode(response.status))
     } catch(err) {}
   }
 }
@@ -67,6 +83,7 @@ export const asyncCurrentUser = () => {
         'https://localhost:1443/api/user'
       )
       dispatch(setUser(response.data));
+      dispatch(setApiStatus(true))
     } catch (err) {}
   }
 }
