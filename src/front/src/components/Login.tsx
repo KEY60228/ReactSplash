@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import { useSelector } from 'react-redux'
 
-import { asyncRegister, asyncLogin, setLoginErrorMessages } from '../stores/auth'
+import { asyncRegister, asyncLogin, setLoginErrorMessages, setRegisterErrorMessages } from '../stores/auth'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -61,6 +61,7 @@ const Login = () => {
   }
   const apiStatus = useSelector((state: State) => state.auth.apiStatus)
   const loginErrors = useSelector((state: State) => state.auth.loginErrorMessages)
+  const registerErrors = useSelector((state: State) => state.auth.registerErrorMessages)
 
   const [data, setData] = useState(0)
   const [name, setName] = useState('')
@@ -93,8 +94,11 @@ const Login = () => {
       password_confirmation: passwordConfirmation,
     }
 
-    await dispatch(asyncRegister(user))
-    history.push('/')
+    await new Promise(() => dispatch(asyncRegister(user)))
+
+    if (apiStatus) {
+      history.push('/')
+    }
   }
 
   useEffect(() => {
@@ -108,6 +112,7 @@ const Login = () => {
     })
 
     dispatch(setLoginErrorMessages(null))
+    dispatch(setRegisterErrorMessages(null))
   }, [])
 
   return (
@@ -133,7 +138,7 @@ const Login = () => {
               { loginErrors.email && 
                 <ul>
                   { loginErrors.email.map((msg: string) => {
-                    return <li>{ msg }</li>
+                    return (<li>{ msg }</li>)
                   })}
                 </ul>
               }
@@ -168,6 +173,31 @@ const Login = () => {
         </TabPanel>
         <TabPanel value={data} index={1}>
           Register Form <br/>
+          { registerErrors && 
+            <div className="errors">
+              { registerErrors.name && 
+                <ul>
+                  { registerErrors.name.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+              { registerErrors.email && 
+                <ul>
+                  { registerErrors.email.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+              { registerErrors.password && 
+                <ul>
+                  { registerErrors.password.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+            </div>
+          }
           <label>Name</label>
           <input
             type="text"
