@@ -8,8 +8,9 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
+import { useSelector } from 'react-redux'
 
-import { asyncRegister, asyncLogin } from '../stores/auth'
+import { asyncRegister, asyncLogin, setLoginErrorMessages, setRegisterErrorMessages } from '../stores/auth'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -52,16 +53,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Login = () => {
   const classes = useStyles()
-
   const history = useHistory()
+  const dispatch = useDispatch()
+
+  interface State {
+    auth: any
+  }
+  const apiStatus = useSelector((state: State) => state.auth.apiStatus)
+  const loginErrors = useSelector((state: State) => state.auth.loginErrorMessages)
+  const registerErrors = useSelector((state: State) => state.auth.registerErrorMessages)
 
   const [data, setData] = useState(0)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
-
-  const dispatch = useDispatch()
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setData(newValue)
@@ -73,8 +79,11 @@ const Login = () => {
       password: password
     }
 
-    await dispatch(asyncLogin(user))
-    history.push('/')
+    await new Promise(() => dispatch(asyncLogin(user)))
+
+    if (apiStatus) {
+      history.push('/')
+    }
   }
 
   const register = async () => {
@@ -85,8 +94,11 @@ const Login = () => {
       password_confirmation: passwordConfirmation,
     }
 
-    await dispatch(asyncRegister(user))
-    history.push('/')
+    await new Promise(() => dispatch(asyncRegister(user)))
+
+    if (apiStatus) {
+      history.push('/')
+    }
   }
 
   useEffect(() => {
@@ -98,6 +110,9 @@ const Login = () => {
     }).then((response: any) => {
       // console.log(response)
     })
+
+    dispatch(setLoginErrorMessages(null))
+    dispatch(setRegisterErrorMessages(null))
   }, [])
 
   return (
@@ -118,6 +133,24 @@ const Login = () => {
         </Paper>
         <TabPanel value={data} index={0}>
           Login Form <br/>
+          { loginErrors && 
+            <div className="errors">
+              { loginErrors.email && 
+                <ul>
+                  { loginErrors.email.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+              { loginErrors.password && 
+                <ul>
+                  { loginErrors.password.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+            </div>
+          }
           <label>Email</label>
           <input
             type="text"
@@ -140,6 +173,31 @@ const Login = () => {
         </TabPanel>
         <TabPanel value={data} index={1}>
           Register Form <br/>
+          { registerErrors && 
+            <div className="errors">
+              { registerErrors.name && 
+                <ul>
+                  { registerErrors.name.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+              { registerErrors.email && 
+                <ul>
+                  { registerErrors.email.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+              { registerErrors.password && 
+                <ul>
+                  { registerErrors.password.map((msg: string) => {
+                    return (<li>{ msg }</li>)
+                  })}
+                </ul>
+              }
+            </div>
+          }
           <label>Name</label>
           <input
             type="text"

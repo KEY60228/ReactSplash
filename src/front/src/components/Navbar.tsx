@@ -31,9 +31,11 @@ const Navbar = () => {
             { isLogin && username }
           </span>
           <div className="navbar__item">
-            <Link to="/login" className="button button--link">
-              Login / Register
-            </Link>
+            { !isLogin && 
+              <Link to="/login" className="button button--link">
+                Login / Register
+              </Link>
+            }
           </div>
         </div>
       </nav>
