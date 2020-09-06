@@ -12,7 +12,7 @@ const slice = createSlice({
   reducers: {
     // action.payloadに渡された引数が入っている
     setCode: (state, action) => {
-      return Object.assign({}, state, { user: action.payload })
+      return Object.assign({}, state, { code: action.payload })
     },
   },
 })
