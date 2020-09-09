@@ -2,16 +2,18 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const PhotoForm = () => {
-  const [preview, setPreview]: [any, any] = useState(null);
+  const [preview, setPreview]: [any, any] = useState('');
 
   const onFileChange = (ev: any) => {
     // 何も選択されていない場合
     if (ev.target.files.length === 0) {
+      setPreview('')
       return false
     }
-
+    
     // ファイルが画像でない場合
     if (! ev.target.files[0].type.match('image.*')) {
+      setPreview('')
       return false
     }
 
