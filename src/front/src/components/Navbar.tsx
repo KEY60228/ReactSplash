@@ -42,7 +42,7 @@ const Navbar = () => {
           </div>
         </div>
         { showForm && 
-          <PhotoForm />
+          <PhotoForm setShowForm={setShowForm}/>
         }
       </nav>
     </>
