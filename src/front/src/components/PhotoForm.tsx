@@ -93,8 +93,8 @@ const PhotoForm = ({
               <div className="erros">
                 { errors.photo &&
                 <ul>
-                  { errors.photo.map((msg: string) => {
-                    return(<li>{ msg }</li>)
+                  { errors.photo.map((msg: string, index: any) => {
+                    return(<li key={index}>{ msg }</li>)
                   })}
                 </ul>
                 }
