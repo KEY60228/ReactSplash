@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+import { useHistory } from 'react-router-dom'
 
 const PhotoForm = ({
   setShowForm
@@ -8,6 +9,7 @@ const PhotoForm = ({
 }) => {
   const [preview, setPreview]: [any, any] = useState(null);
   const [photo, setPhoto]: [any, any] = useState(null);
+  const history = useHistory();
 
   const onFileChange = (ev: any) => {
     // 何も選択されていない場合
@@ -52,6 +54,7 @@ const PhotoForm = ({
     setPreview('')
     setPhoto(null)
     setShowForm(false)
+    history.push(`/photos/${response.data.id}`)
   }
 
   return (
