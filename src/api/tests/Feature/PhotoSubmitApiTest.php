@@ -27,7 +27,7 @@ class PhotoSubmitApiTest extends TestCase
   public function should__ファイルをアップロードできる()
   {
     // テスト用のストレージ(storage/framework/testing)
-    Storage::fake('s3');
+    Storage::fake('local');
 
     $response = $this->actingAs($this->user)->json('POST', route('photo.create'), [
       'photo' => UploadedFile::fake()->image('photo.jpg'),
@@ -41,7 +41,7 @@ class PhotoSubmitApiTest extends TestCase
     $this->assertRegExp('/^[0-9a-zA-Z-_]{12}$/', $photo->id);
 
     // DBに挿入されたファイル名のファイルがストレージに保存されていること
-    Storage::cloud()->assertExists($photo->filename);
+    Storage::assertExists($photo->filename);
   }
 
   /**
@@ -50,9 +50,9 @@ class PhotoSubmitApiTest extends TestCase
   public function should_データベースエラーの場合はファイルを保存しない()
   {
     // DBエラー
-    Shema::drop('photos');
+    Schema::drop('photos');
 
-    Storage::fake('s3');
+    Storage::fake('local');
 
     $response = $this->actingAs($this->user)->json('POST', route('photo.create'), [
       'photo' => UploadedFile::fake()->image('photo.jpg'),
@@ -62,7 +62,7 @@ class PhotoSubmitApiTest extends TestCase
     $response->assertStatus(500);
 
     // ストレージにファイルが保存されていないこと
-    $this->assertEqual(0, count(Storage::cloud()->files()));
+    $this->assertEquals(0, count(Storage::files()));
   }
 
   /**
@@ -71,7 +71,7 @@ class PhotoSubmitApiTest extends TestCase
   public function should_ファイル保存エラーの場合はDBへの挿入はしない()
   {
     // ストレージをモックして保存時にエラーを起こさせる
-    Storage::shouldReceive('cloud')->once()->andReturnNull();
+    Storage::shouldReceive('local')->andReturnNull();
 
     $response = $this->actingAs($this->user)->json('POST', route('photo.create'), [
       'photo' => UploadedFile::fake()->image('photo.jpg'),
