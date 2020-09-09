@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import { setCode } from '../stores/error'
+import Loader from './Loader'
 
 const PhotoForm = ({
   setShowForm
@@ -14,6 +15,7 @@ const PhotoForm = ({
   const [preview, setPreview]: [any, any] = useState(null)
   const [photo, setPhoto]: [any, any] = useState(null)
   const [errors, setErrors]: [any, any] = useState(null)
+  const [loading, setLoading]: [boolean, any] = useState(false)
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -52,10 +54,14 @@ const PhotoForm = ({
 
   const submit = async(ev: any) => {
     ev.preventDefault()
+    setLoading(true)
+
     const formData = new FormData()
     formData.append('photo', photo)
 
     const response = await window.axios.post('https://localhost:1443/api/photos', formData)
+
+    setLoading(false)
 
     if (response.status === UNPROCESSABLE_ENTITY) {
       setErrors(response.data.errors)
@@ -78,28 +84,33 @@ const PhotoForm = ({
     <>
       <div className="photo-form">
         <h2 className="title">Submit a Photo</h2>
-        <form className="form">
-          { errors &&
-            <div className="erros">
-              { errors.photo &&
-              <ul>
-                { errors.photo.map((msg: string) => {
-                  return(<li>{ msg }</li>)
-                })}
-              </ul>
-              }
+        { loading &&
+          <Loader>Sending your photo...</Loader>
+        }
+        { !loading &&
+          <form className="form">
+            { errors &&
+              <div className="erros">
+                { errors.photo &&
+                <ul>
+                  { errors.photo.map((msg: string) => {
+                    return(<li>{ msg }</li>)
+                  })}
+                </ul>
+                }
+              </div>
+            }
+            <input className="form__item" type="file" onChange={onFileChange} />
+            { preview &&
+              <output className="form__putput">
+                <img src={preview} alt="" />
+              </output>
+            }
+            <div className="form__button">
+              <button type="submit" className="button button--inverse" onClick={submit}>submit</button>
             </div>
-          }
-          <input className="form__item" type="file" onChange={onFileChange} />
-          { preview &&
-            <output className="form__putput">
-              <img src={preview} alt="" />
-            </output>
-          }
-          <div className="form__button">
-            <button type="submit" className="button button--inverse" onClick={submit}>submit</button>
-          </div>
-        </form>
+          </form>
+        }
       </div>
     </>
   )
