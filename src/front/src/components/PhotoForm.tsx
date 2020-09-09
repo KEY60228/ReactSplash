@@ -1,15 +1,21 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+
+import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+import { setCode } from '../stores/error'
 
 const PhotoForm = ({
   setShowForm
 }: {
   setShowForm: any
 }) => {
-  const [preview, setPreview]: [any, any] = useState(null);
-  const [photo, setPhoto]: [any, any] = useState(null);
+  const [preview, setPreview]: [any, any] = useState(null)
+  const [photo, setPhoto]: [any, any] = useState(null)
+  const [errors, setErrors]: [any, any] = useState(null)
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const onFileChange = (ev: any) => {
     // 何も選択されていない場合
@@ -49,11 +55,22 @@ const PhotoForm = ({
     const formData = new FormData()
     formData.append('photo', photo)
 
-    const response = await window.axios.post('/api/photos', formData)
+    const response = await window.axios.post('https://localhost:1443/api/photos', formData)
+
+    if (response.status === UNPROCESSABLE_ENTITY) {
+      setErrors(response.data.errors)
+      return false
+    }
 
     setPreview('')
     setPhoto(null)
     setShowForm(false)
+
+    if (response.status !== CREATED) {
+      dispatch(setCode(response.status))
+      return false
+    }
+
     history.push(`/photos/${response.data.id}`)
   }
 
@@ -62,6 +79,17 @@ const PhotoForm = ({
       <div className="photo-form">
         <h2 className="title">Submit a Photo</h2>
         <form className="form">
+          { errors &&
+            <div className="erros">
+              { errors.photo &&
+              <ul>
+                { errors.photo.map((msg: string) => {
+                  return(<li>{ msg }</li>)
+                })}
+              </ul>
+              }
+            </div>
+          }
           <input className="form__item" type="file" onChange={onFileChange} />
           { preview &&
             <output className="form__putput">

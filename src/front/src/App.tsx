@@ -12,7 +12,7 @@ import GuestRoute from './routes/GuestRoute'
 import PrivateRoute from './routes/PrivateRoute'
 import SystemError from './components/errors/SystemError'
 import { INTERNAL_SERVER_ERROR } from './util'
-import PhotoDetail from './PhotoDetail'
+import PhotoDetail from './components/PhotoDetail'
 
 const App = () => {
   const dispatch = useDispatch()
