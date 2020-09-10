@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 写真のダウンロード
+Route::get('/photos/{photo}/download', 'PhotoController@download');
+
 Route::get('/', function () {
     return view('welcome');
 });
