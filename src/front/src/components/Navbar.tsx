@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
+import PhotoForm from './PhotoForm'
 
 const Navbar = () => {
   interface State {
@@ -11,6 +12,8 @@ const Navbar = () => {
   
   const isLogin = useSelector((state: State) => !! state.auth.user)
   const username = useSelector((state: State) => state.auth.user ? state.auth.user.name : '')
+
+  const [showForm, setShowForm] = useState(false)
 
   return (
     <>
@@ -21,7 +24,7 @@ const Navbar = () => {
         <div className="navbar__menu">
           <div className="navbar__item">
             { isLogin && 
-              <button className="button">
+              <button className="button" onClick={ev => setShowForm(!showForm)}>
                 <i className="icon ion-md-add"></i>
                 Submit a photo
               </button>
@@ -38,6 +41,9 @@ const Navbar = () => {
             }
           </div>
         </div>
+        { showForm && 
+          <PhotoForm setShowForm={setShowForm}/>
+        }
       </nav>
     </>
   )
