@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import { setCode } from '../stores/error'
+import { setContent } from '../stores/message'
 import Loader from './Loader'
 
 const PhotoForm = ({
@@ -76,6 +77,9 @@ const PhotoForm = ({
       dispatch(setCode(response.status))
       return false
     }
+
+    dispatch(setContent('写真が投稿されました！'))
+    setTimeout(() => dispatch(setContent('')), 6000)
 
     history.push(`/photos/${response.data.id}`)
   }

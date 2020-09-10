@@ -13,6 +13,7 @@ import PrivateRoute from './routes/PrivateRoute'
 import SystemError from './components/errors/SystemError'
 import { INTERNAL_SERVER_ERROR } from './util'
 import PhotoDetail from './components/PhotoDetail'
+import Message from './components/message'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -42,6 +43,7 @@ const App = () => {
     <>
       <BrowserRouter>
         <Navbar />
+        <Message />
         <Switch>
           <Route path="/" exact children={<PhotoList />} />
           <GuestRoute path="/login" children={<Login />} />
