@@ -137,15 +137,15 @@ const Login = () => {
             <div className="errors">
               { loginErrors.email && 
                 <ul>
-                  { loginErrors.email.map((msg: string) => {
-                    return (<li>{ msg }</li>)
+                  { loginErrors.email.map((msg: string, index: any) => {
+                    return (<li key={index}>{ msg }</li>)
                   })}
                 </ul>
               }
               { loginErrors.password && 
                 <ul>
-                  { loginErrors.password.map((msg: string) => {
-                    return (<li>{ msg }</li>)
+                  { loginErrors.password.map((msg: string, index: any) => {
+                    return (<li key={index}>{ msg }</li>)
                   })}
                 </ul>
               }
@@ -177,22 +177,22 @@ const Login = () => {
             <div className="errors">
               { registerErrors.name && 
                 <ul>
-                  { registerErrors.name.map((msg: string) => {
-                    return (<li>{ msg }</li>)
+                  { registerErrors.name.map((msg: string, index: any) => {
+                    return (<li key={index}>{ msg }</li>)
                   })}
                 </ul>
               }
               { registerErrors.email && 
                 <ul>
-                  { registerErrors.email.map((msg: string) => {
-                    return (<li>{ msg }</li>)
+                  { registerErrors.email.map((msg: string, index: any) => {
+                    return (<li key={index}>{ msg }</li>)
                   })}
                 </ul>
               }
               { registerErrors.password && 
                 <ul>
-                  { registerErrors.password.map((msg: string) => {
-                    return (<li>{ msg }</li>)
+                  { registerErrors.password.map((msg: string, index:any) => {
+                    return (<li key={index}>{ msg }</li>)
                   })}
                 </ul>
               }
