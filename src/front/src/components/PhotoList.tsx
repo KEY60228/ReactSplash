@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 import Photo from './Photo'
 import { setCode } from '../stores/error'
@@ -9,6 +10,18 @@ import { OK } from '../util'
 const PhotoList = () => {
   const dispatch = useDispatch()
   const [photos, setPhotos]: [any, any] = useState([]);
+
+  const useQuery = () => {
+    const location = useLocation();
+
+    if (!location.search) {
+      return new URLSearchParams('page=1')
+    }
+
+    return new URLSearchParams(location.search);
+  }
+
+  const query = useQuery()
 
   const fetchPhotos = async() => {
     const response = await window.axios.get('https://localhost:1443/api/photos')
