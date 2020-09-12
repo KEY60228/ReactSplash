@@ -9,23 +9,15 @@ const Pagination = ({
   currentPage: number,
   lastPage: number
 }) => {
-  const isFirstPage = () => {
-    return currentPage === 1
-  }
-
-  const isLastPage = () => {
-    return currentPage === lastPage
-  }
-
   return (
     <>
       <div className="pagination">
-        { !isFirstPage &&
+        { currentPage !== 1 &&
           <Link to={`/?page=${currentPage - 1}`} className="button">
             &laquo; prev
           </Link>
         }
-        { !isLastPage &&
+        { currentPage !== lastPage &&
           <Link to={`/?page=${currentPage + 1}`} className="button">
             next &raquo;
           </Link>
