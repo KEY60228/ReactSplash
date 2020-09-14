@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { OK } from '../util'
+import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import { setCode } from '../stores/error'
 
 const PhotoDetail = () => {
@@ -11,6 +11,7 @@ const PhotoDetail = () => {
   const { id }: { id: any } = useParams()
   const [photo, setPhoto]: [any, any] = useState(null)
   const [commentContent, setCommentContent]: [any, any] = useState('')
+  const [commentErrors, setCommentErrors]: [any, any] = useState(null)
 
   const fetchPhoto = async() => {
     const response = await window.axios.get(`https://localhost:1443/api/photos/${id}`)
@@ -29,7 +30,18 @@ const PhotoDetail = () => {
       content: commentContent
     })
 
+    if (response.status === UNPROCESSABLE_ENTITY) {
+      setCommentErrors(response.data.errors)
+      return false
+    }
+
     setCommentContent('')
+    setCommentErrors(null)
+
+    if (response.status !== CREATED) {
+      dispatch(setCode(response.status))
+      return false
+    }
   }
 
   useEffect(() => {
@@ -56,6 +68,17 @@ const PhotoDetail = () => {
               <i className="icon ion-md-chatboxes"></i>Comments
             </h2>
             <form className="form" onClick={addComment}>
+              { commentErrors &&
+                <div className="errors">
+                  <ul>
+                    { commentErrors.content &&
+                      commentErrors.content.map((msg: any, index: any) => {
+                        <li key={index}>{ msg }</li>
+                      })
+                    }
+                  </ul>
+                </div>
+              }
               <textarea className="form__item" onChange={setCommentContent}>{commentContent}</textarea>
               <div className="form__button">
                 <button type="submit" className="button button--inverse">submit comment</button>
