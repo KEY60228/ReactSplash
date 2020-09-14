@@ -26,7 +26,7 @@ const PhotoDetail = () => {
   const addComment = async(ev: any) => {
     ev.preventDefault()
 
-    const response = await window.axios.post(`/api/photos/${id}/comments`, {
+    const response = await window.axios.post(`https://localhost:1443/api/photos/${id}/comments`, {
       content: commentContent
     })
 
@@ -79,7 +79,7 @@ const PhotoDetail = () => {
                   </ul>
                 </div>
               }
-              <textarea className="form__item" onChange={setCommentContent}>{commentContent}</textarea>
+              <textarea className="form__item" onChange={setCommentContent}></textarea>
               <div className="form__button">
                 <button type="submit" className="button button--inverse">submit comment</button>
               </div>
