@@ -12,7 +12,7 @@ class Photo extends Model
   
   // JSONに含める属性
   protected $visible = [
-    'id', 'owner'
+    'id', 'owner', 'comments'
   ];
 
   // IDの桁数
@@ -73,4 +73,13 @@ class Photo extends Model
   // {
   //   return Storage::url($this->attributes['filename']);
   // }
+
+  /**
+   * リレーションシップ - commentsテーブル
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   */
+  public function comments()
+  {
+    return $this->hasMany('App\Comment')->orderBy('id', 'desc');
+  }
 }
