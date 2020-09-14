@@ -10,6 +10,7 @@ const PhotoDetail = () => {
   const dispatch = useDispatch()
   const { id }: { id: any } = useParams()
   const [photo, setPhoto]: [any, any] = useState(null)
+  const [commentContent, setCommentContent]: [any, any] = useState('')
 
   const fetchPhoto = async() => {
     const response = await window.axios.get(`https://localhost:1443/api/photos/${id}`)
@@ -19,6 +20,16 @@ const PhotoDetail = () => {
     }
 
     setPhoto(response.data)
+  }
+
+  const addComment = async(ev: any) => {
+    ev.preventDefault()
+
+    const response = await window.axios.post(`/api/photos/${id}/comments`, {
+      content: commentContent
+    })
+
+    setCommentContent('')
   }
 
   useEffect(() => {
@@ -44,6 +55,12 @@ const PhotoDetail = () => {
             <h2 className="photo-detail__title">
               <i className="icon ion-md-chatboxes"></i>Comments
             </h2>
+            <form className="form" onClick={addComment}>
+              <textarea className="form__item" onChange={setCommentContent}>{commentContent}</textarea>
+              <div className="form__button">
+                <button type="submit" className="button button--inverse">submit comment</button>
+              </div>
+            </form>
           </div>
         </div>
       }
