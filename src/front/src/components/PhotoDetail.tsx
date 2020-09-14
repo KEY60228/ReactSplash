@@ -72,6 +72,23 @@ const PhotoDetail = () => {
             <h2 className="photo-detail__title">
               <i className="icon ion-md-chatboxes"></i>Comments
             </h2>
+            { photo.comments.length > 0 &&
+              <ul className="photo-detail__comments">
+                { photo.comments.map((comment: any, index:any) => {
+                  <li key={index} className="photo-detail__commentItem">
+                    <p className="photo-detail__commentBody">
+                      {comment.content}
+                    </p>
+                    <p className="photo-detail__commentInfo">
+                      {comment.author.name}
+                    </p>
+                  </li>
+                })}
+              </ul>
+            }
+            { photo.comments.length &&
+              <p>No comments yet.</p>
+            }
             { isLogin &&
               <form className="form" onClick={addComment}>
                 { commentErrors &&
