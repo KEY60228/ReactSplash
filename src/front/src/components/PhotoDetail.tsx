@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { OK } from '../util'
+import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import { setCode } from '../stores/error'
 
 const PhotoDetail = () => {
   const dispatch = useDispatch()
   const { id }: { id: any } = useParams()
   const [photo, setPhoto]: [any, any] = useState(null)
+  const [commentContent, setCommentContent]: [any, any] = useState('')
+  const [commentErrors, setCommentErrors]: [any, any] = useState(null)
 
   const fetchPhoto = async() => {
     const response = await window.axios.get(`https://localhost:1443/api/photos/${id}`)
@@ -20,6 +22,32 @@ const PhotoDetail = () => {
 
     setPhoto(response.data)
   }
+
+  const addComment = async(ev: any) => {
+    ev.preventDefault()
+
+    const response = await window.axios.post(`https://localhost:1443/api/photos/${id}/comments`, {
+      content: commentContent
+    })
+
+    if (response.status === UNPROCESSABLE_ENTITY) {
+      setCommentErrors(response.data.errors)
+      return false
+    }
+
+    setCommentContent('')
+    setCommentErrors(null)
+
+    if (response.status !== CREATED) {
+      dispatch(setCode(response.status))
+      return false
+    }
+  }
+
+  interface State {
+    auth: any
+  }
+  const isLogin = useSelector((state: State) => state.auth.user)
 
   useEffect(() => {
     fetchPhoto()
@@ -44,6 +72,42 @@ const PhotoDetail = () => {
             <h2 className="photo-detail__title">
               <i className="icon ion-md-chatboxes"></i>Comments
             </h2>
+            { photo.comments.length > 0 &&
+              <ul className="photo-detail__comments">
+                { photo.comments.map((comment: any, index:any) => {
+                  <li key={index} className="photo-detail__commentItem">
+                    <p className="photo-detail__commentBody">
+                      {comment.content}
+                    </p>
+                    <p className="photo-detail__commentInfo">
+                      {comment.author.name}
+                    </p>
+                  </li>
+                })}
+              </ul>
+            }
+            { photo.comments.length &&
+              <p>No comments yet.</p>
+            }
+            { isLogin &&
+              <form className="form" onClick={addComment}>
+                { commentErrors &&
+                  <div className="errors">
+                    <ul>
+                      { commentErrors.content &&
+                        commentErrors.content.map((msg: any, index: any) => {
+                          <li key={index}>{ msg }</li>
+                        })
+                      }
+                    </ul>
+                  </div>
+                }
+                <textarea className="form__item" onChange={setCommentContent}></textarea>
+                <div className="form__button">
+                  <button type="submit" className="button button--inverse">submit comment</button>
+                </div>
+              </form>
+            }
           </div>
         </div>
       }
