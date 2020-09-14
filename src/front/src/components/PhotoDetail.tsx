@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
@@ -44,6 +44,11 @@ const PhotoDetail = () => {
     }
   }
 
+  interface State {
+    auth: any
+  }
+  const isLogin = useSelector((state: State) => state.auth.user)
+
   useEffect(() => {
     fetchPhoto()
   })
@@ -67,23 +72,25 @@ const PhotoDetail = () => {
             <h2 className="photo-detail__title">
               <i className="icon ion-md-chatboxes"></i>Comments
             </h2>
-            <form className="form" onClick={addComment}>
-              { commentErrors &&
-                <div className="errors">
-                  <ul>
-                    { commentErrors.content &&
-                      commentErrors.content.map((msg: any, index: any) => {
-                        <li key={index}>{ msg }</li>
-                      })
-                    }
-                  </ul>
+            { isLogin &&
+              <form className="form" onClick={addComment}>
+                { commentErrors &&
+                  <div className="errors">
+                    <ul>
+                      { commentErrors.content &&
+                        commentErrors.content.map((msg: any, index: any) => {
+                          <li key={index}>{ msg }</li>
+                        })
+                      }
+                    </ul>
+                  </div>
+                }
+                <textarea className="form__item" onChange={setCommentContent}></textarea>
+                <div className="form__button">
+                  <button type="submit" className="button button--inverse">submit comment</button>
                 </div>
-              }
-              <textarea className="form__item" onChange={setCommentContent}></textarea>
-              <div className="form__button">
-                <button type="submit" className="button button--inverse">submit comment</button>
-              </div>
-            </form>
+              </form>
+            }
           </div>
         </div>
       }
